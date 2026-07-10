@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>五分钟海洋呼吸冥想</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap');
+
+:root {
+  --deep: #0a1628;
+  --ocean1: #0c2d4a;
+  --ocean2: #134e6f;
+  --foam: #b8e4f0;
+  --sand: #f0e6d3;
+  --text: #e8f0f8;
+  --text-soft: #8ab4cc;
+  --breath-in: 4s;
+  --breath-hold: 2s;
+  --breath-out: 6s;
+  --breath-pause: 2s;
+  --cycle: 14s; /* total: 4+2+6+2 */
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Noto Serif SC', serif;
+  background: var(--deep);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* === Ocean background === */
+.ocean-bg {
+  position: fixed; inset: 0;
+  background: linear-gradient(180deg,
+    #0a1628 0%,
+    #0c2d4a 30%,
+    #134e6f 60%,
+    #1a6b8a 80%,
+    #2190a8 100%
+  );
+  z-index: 0;
+}
+
+/* Waves */
+.wave {
+  position: fixed;
+  bottom: 0; left: 0;
+  width: 200%;
+  height: 120px;
+  z-index: 1;
+  opacity: 0.15;
+}
+
+.wave svg {
+  width: 100%;
+  height: 100%;
+}
+
+.wave-1 { animation: drift 8s ease-in-out infinite; }
+.wave-2 { animation: drift 10s ease-in-out infinite reverse; bottom: -10px; opacity: 0.1; }
+.wave-3 { animation: drift 12s ease-in-out infinite; bottom: -20px; opacity: 0.07; }
+
+@keyframes drift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-25%); }
+}
+
+/* Stars */
+.stars {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 40vh;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  width: 2px; height: 2px;
+  background: #fff;
+  border-radius: 50%;
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.8; }
+}
+
+/* === Main content === */
+.container {
+  position: relative;
+  z-index: 10;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 60px 24px 120px;
+}
+
+/* === Header === */
+.header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.header h1 {
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, var(--foam), #fff, var(--foam));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header .subtitle {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: clamp(0.85rem, 2vw, 1rem);
+  color: var(--text-soft);
+  font-weight: 300;
+  letter-spacing: 2px;
+}
+
+.header .duration {
+  display: inline-block;
+  margin-top: 16px;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 0.8rem;
+  color: var(--foam);
+  background: rgba(184,228,240,0.08);
+  border: 1px solid rgba(184,228,240,0.15);
+  padding: 6px 18px;
+  border-radius: 30px;
+}
+
+/* === Breathing circle === */
+.breath-section {
+  text-align: center;
+  margin: 40px 0 50px;
+}
+
+.breath-ring {
+  position: relative;
+  width: min(260px, 60vw);
+  height: min(260px, 60vw);
+  margin: 0 auto 20px;
+}
+
+.breath-circle {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(184,228,240,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.5s ease;
+}
+
+.breath-circle.active {
+  animation: breathe var(--cycle) ease-in-out infinite;
+}
+
+.breath-glow {
+  position: absolute;
+  inset: -15px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(184,228,240,0.06), transparent 70%);
+}
+
+.breath-circle.active .breath-glow {
+  animation: glow var(--cycle) ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0% { transform: scale(0.6); border-color: rgba(184,228,240,0.2); }
+  28.6% { transform: scale(1); border-color: rgba(184,228,240,0.5); } /* 4s in */
+  42.9% { transform: scale(1); border-color: rgba(184,228,240,0.4); } /* hold 2s */
+  85.7% { transform: scale(0.6); border-color: rgba(184,228,240,0.2); } /* out 6s */
+  100% { transform: scale(0.6); border-color: rgba(184,228,240,0.2); } /* pause 2s */
+}
+
+@keyframes glow {
+  0% { opacity: 0.3; }
+  28.6% { opacity: 1; }
+  42.9% { opacity: 0.8; }
+  85.7% { opacity: 0.3; }
+  100% { opacity: 0.3; }
+}
+
+.breath-text {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  color: var(--foam);
+  font-weight: 500;
+  z-index: 1;
+  position: relative;
+}
+
+.breath-counter {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  margin-top: 8px;
+}
+
+.btn-start {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--deep);
+  background: var(--foam);
+  border: none;
+  padding: 12px 32px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 16px;
+}
+
+.btn-start:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(184,228,240,0.25);
+}
+
+.btn-start.running {
+  background: rgba(184,228,240,0.12);
+  color: var(--foam);
+  border: 1px solid rgba(184,228,240,0.2);
+}
+
+/* === Language selector === */
+.lang-select {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 22px;
+}
+
+.lang-btn {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-soft);
+  background: transparent;
+  border: 1px solid rgba(184,228,240,0.12);
+  padding: 6px 14px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.lang-btn:hover { border-color: rgba(184,228,240,0.3); color: var(--foam); }
+
+.lang-btn.active {
+  color: var(--deep);
+  background: var(--foam);
+  border-color: var(--foam);
+  font-weight: 500;
+}
+
+/* === Audio toggles === */
+.audio-toggles {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.audio-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--text-soft);
+  background: rgba(184,228,240,0.04);
+  border: 1px solid rgba(184,228,240,0.12);
+  padding: 8px 16px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.audio-toggle:hover { border-color: rgba(184,228,240,0.3); }
+
+.audio-toggle .at-icon {
+  font-size: 0.9rem;
+  transition: opacity 0.3s;
+}
+
+.audio-toggle.active {
+  color: var(--foam);
+  background: rgba(184,228,240,0.1);
+  border-color: rgba(184,228,240,0.25);
+}
+
+.audio-toggle:not(.active) {
+  opacity: 0.55;
+}
+
+.audio-toggle:not(.active) .at-icon {
+  opacity: 0.4;
+}
+
+/* === Guide sections === */
+.section {
+  margin-bottom: 40px;
+}
+
+.section-num {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--foam);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  opacity: 0.6;
+}
+
+.section h2 {
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+.section p {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
+  color: var(--text-soft);
+  line-height: 2;
+  margin-bottom: 14px;
+  font-weight: 300;
+}
+
+.section p strong {
+  color: var(--foam);
+  font-weight: 500;
+}
+
+.step-card {
+  background: rgba(184,228,240,0.04);
+  border: 1px solid rgba(184,228,240,0.08);
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 14px;
+}
+
+.step-card .step-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.step-num {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(184,228,240,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--foam);
+  flex-shrink: 0;
+}
+
+.step-card h3 {
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.step-card p {
+  margin-bottom: 0;
+  padding-left: 44px;
+}
+
+.rhythm-box {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.rhythm-item {
+  text-align: center;
+  padding: 16px 10px;
+  border-radius: 12px;
+  background: rgba(184,228,240,0.04);
+  border: 1px solid rgba(184,228,240,0.08);
+}
+
+.rhythm-item .r-label {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 0.7rem;
+  color: var(--text-soft);
+  margin-bottom: 6px;
+}
+
+.rhythm-item .r-num {
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  font-weight: 700;
+  color: var(--foam);
+}
+
+.rhythm-item .r-unit {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 0.7rem;
+  color: var(--text-soft);
+  margin-top: 2px;
+}
+
+.r-in { border-color: rgba(100,200,255,0.15); }
+.r-hold { border-color: rgba(184,228,240,0.15); }
+.r-out { border-color: rgba(33,144,168,0.2); }
+.r-pause { border-color: rgba(184,228,240,0.08); }
+
+.tip-box {
+  background: rgba(240,230,211,0.04);
+  border-left: 3px solid rgba(240,230,211,0.2);
+  border-radius: 0 12px 12px 0;
+  padding: 16px 20px;
+  margin: 16px 0;
+}
+
+.tip-box p {
+  color: var(--sand);
+  font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+}
+
+.tip-box strong {
+  color: var(--sand) !important;
+}
+
+.divider {
+  width: 50px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--foam), transparent);
+  margin: 40px 0;
+  opacity: 0.3;
+}
+
+/* Timer display */
+.timer {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--foam);
+  text-align: center;
+  margin: 10px 0;
+  letter-spacing: 2px;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.timer.show { opacity: 1; }
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 30px 0;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-soft);
+  opacity: 0.4;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .rhythm-box { grid-template-columns: repeat(2, 1fr); }
+  .container { padding: 40px 18px 80px; }
+}
+</style>
+</head>
+<body>
+
+<div class="ocean-bg"></div>
+
+<!-- Stars -->
+<div class="stars" id="stars"></div>
+
+<!-- Waves -->
+<div class="wave wave-1">
+  <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+    <path d="M0,60 C360,120 720,0 1080,60 C1260,90 1380,45 1440,60 L1440,120 L0,120Z" fill="rgba(184,228,240,0.5)"/>
+  </svg>
+</div>
+<div class="wave wave-2">
+  <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+    <path d="M0,80 C240,20 480,100 720,60 C960,20 1200,80 1440,50 L1440,120 L0,120Z" fill="rgba(184,228,240,0.4)"/>
+  </svg>
+</div>
+<div class="wave wave-3">
+  <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+    <path d="M0,40 C300,100 600,20 900,70 C1100,100 1300,30 1440,60 L1440,120 L0,120Z" fill="rgba(184,228,240,0.3)"/>
+  </svg>
+</div>
+
+<!-- Main content -->
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>五分钟<br>海洋呼吸冥想</h1>
+    <p class="subtitle">乌 加 依 呼 吸 · Ujjayi Pranayama</p>
+    <span class="duration">🌊 5 分钟 · 约 21 个呼吸周期</span>
+  </div>
+
+  <!-- Breathing circle -->
+  <div class="breath-section">
+    <div class="breath-ring">
+      <div class="breath-circle" id="breathCircle">
+        <div class="breath-glow"></div>
+        <span class="breath-text" id="breathText">准备开始</span>
+      </div>
+    </div>
+    <div class="timer" id="timer">5:00</div>
+    <div class="breath-counter" id="counter"></div>
+    <button class="btn-start" id="btnStart" onclick="toggleBreath()">🌊 开始呼吸</button>
+
+    <div class="lang-select" id="langSelect">
+      <button class="lang-btn active" data-lang="zh" onclick="setLang('zh')">中文</button>
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="ja" onclick="setLang('ja')">日本語</button>
+      <button class="lang-btn" data-lang="ko" onclick="setLang('ko')">한국어</button>
+      <button class="lang-btn" data-lang="es" onclick="setLang('es')">ES</button>
+    </div>
+
+    <div class="audio-toggles">
+      <button class="audio-toggle active" id="btnVoice" onclick="toggleVoice()">
+        <span class="at-icon">🔊</span> <span id="lblVoice">语音提示</span>
+      </button>
+      <button class="audio-toggle active" id="btnMusic" onclick="toggleMusic()">
+        <span class="at-icon">🎵</span> <span id="lblMusic">背景音乐</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- What is Ocean Breath -->
+  <div class="section">
+    <div class="section-num">· 什么是海洋呼吸 ·</div>
+    <h2>像海浪一样呼吸</h2>
+    <p>
+      海洋呼吸（Ujjayi Breath）是瑜伽中最经典的呼吸法之一。
+      通过<strong>微微收缩喉咙</strong>，让呼吸发出类似远处海浪的轻柔声响——
+      吸气时像海浪涌来，呼气时像海浪退去。
+    </p>
+    <p>
+      这种呼吸法能<strong>激活副交感神经</strong>，降低心率和血压，
+      帮助你在紧张的工作、会议或实验间隙，快速找回内心的平静。
+    </p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Rhythm -->
+  <div class="section">
+    <div class="section-num">· 呼吸节奏 ·</div>
+    <h2>四步呼吸循环</h2>
+    <p>每个循环约 14 秒，5 分钟内完成约 21 个循环。</p>
+
+    <div class="rhythm-box">
+      <div class="rhythm-item r-in">
+        <div class="r-label">吸气</div>
+        <div class="r-num">4</div>
+        <div class="r-unit">秒</div>
+      </div>
+      <div class="rhythm-item r-hold">
+        <div class="r-label">屏息</div>
+        <div class="r-num">2</div>
+        <div class="r-unit">秒</div>
+      </div>
+      <div class="rhythm-item r-out">
+        <div class="r-label">呼气</div>
+        <div class="r-num">6</div>
+        <div class="r-unit">秒</div>
+      </div>
+      <div class="rhythm-item r-pause">
+        <div class="r-label">静止</div>
+        <div class="r-num">2</div>
+        <div class="r-unit">秒</div>
+      </div>
+    </div>
+
+    <div class="tip-box">
+      <p><strong>关键：</strong>呼气时间是吸气的 1.5 倍。更长的呼气能更有效地激活迷走神经，让身体进入深度放松状态。</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Step by step -->
+  <div class="section">
+    <div class="section-num">· 详细步骤 ·</div>
+    <h2>跟着做</h2>
+
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <h3>找到舒适的姿势</h3>
+      </div>
+      <p>坐在椅子上或地板上，脊柱自然挺直。双手轻放在膝盖上，放松双肩。如果可以，轻轻闭上眼睛。</p>
+    </div>
+
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <h3>学会"海浪声"</h3>
+      </div>
+      <p>想象你在对着镜子哈气——感受喉咙后部那种轻微的收缩。现在<strong>闭上嘴</strong>，保持同样的喉咙收缩，用鼻子呼吸。你会听到一种柔和的、类似远处海浪的"嘶嘶"声。</p>
+    </div>
+
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <h3>吸气 — 海浪涌来（4 秒）</h3>
+      </div>
+      <p>用鼻子缓慢吸气，让空气从喉咙深处经过，发出轻柔的声响。感受腹部先膨胀，然后胸腔扩展，就像<strong>一波海浪从远方涌向岸边</strong>。</p>
+    </div>
+
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">4</div>
+        <h3>屏息 — 浪花到达顶点（2 秒）</h3>
+      </div>
+      <p>温柔地屏住呼吸，不要用力。就像海浪到达最高点的那一刻——<strong>悬浮、静止、充满能量</strong>。</p>
+    </div>
+
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">5</div>
+        <h3>呼气 — 海浪退去（6 秒）</h3>
+      </div>
+      <p>缓慢地从鼻子呼出，保持喉咙的轻微收缩。感受气息像<strong>退去的海浪</strong>一样，缓缓流出。呼气要比吸气更长、更慢、更柔和。</p>
+    </div>
+
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">6</div>
+        <h3>静止 — 潮间的宁静（2 秒）</h3>
+      </div>
+      <p>呼气结束后，不急着吸气。享受这两秒的<strong>完全寂静</strong>——就像两波海浪之间那片安宁的沙滩。然后，新的海浪自然涌来。</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Benefits -->
+  <div class="section">
+    <div class="section-num">· 益处 ·</div>
+    <h2>为什么海洋呼吸有效</h2>
+
+    <div class="step-card" style="border-color:rgba(100,200,255,0.12);">
+      <p style="padding-left:0;">
+        <strong>🧠 降低焦虑：</strong>延长的呼气直接激活迷走神经，向大脑发送"安全"信号<br><br>
+        <strong>❤️ 稳定心率：</strong>规律的呼吸节奏同步心跳，降低心率变异性<br><br>
+        <strong>🔬 提升专注：</strong>喉咙的轻微收缩要求持续的注意力，让杂念自然消散<br><br>
+        <strong>💤 改善睡眠：</strong>睡前练习 5 分钟可显著缩短入睡时间<br><br>
+        <strong>🌡️ 调节体温：</strong>古典瑜伽认为 Ujjayi 呼吸能产生内在热量，温暖身体
+      </p>
+    </div>
+
+    <div class="tip-box">
+      <p><strong>小贴士：</strong>如果感到头晕或不适，请立即恢复自然呼吸。初学者可以将屏息缩短为 1 秒，或完全跳过屏息环节。呼吸应始终感觉舒适、自然，从不勉强。</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Closing -->
+  <div class="section" style="text-align:center;">
+    <h2 style="font-size:clamp(1rem,2.5vw,1.3rem); font-weight:400; color:var(--text-soft); line-height:2;">
+      "呼吸是连接身体与心灵的桥梁。<br>
+      当你控制了呼吸，你就控制了内心。"
+    </h2>
+    <p style="font-size:0.8rem; color:var(--text-soft); opacity:0.5; margin-top:12px;">— 帕坦伽利《瑜伽经》</p>
+  </div>
+
+  <div class="footer">
+    🌊 愿你如海洋般宁静而有力量
+  </div>
+
+</div>
+
+<script>
+// Generate stars
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 60; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  s.style.left = Math.random() * 100 + '%';
+  s.style.top = Math.random() * 100 + '%';
+  s.style.animationDelay = Math.random() * 3 + 's';
+  s.style.width = s.style.height = (Math.random() * 2 + 1) + 'px';
+  starsEl.appendChild(s);
+}
+
+// Breathing controller
+let running = false;
+let timerInterval = null;
+let phaseTimeout = null;
+let cycleCount = 0;
+let totalSeconds = 300; // 5 minutes
+
+const circle = document.getElementById('breathCircle');
+const textEl = document.getElementById('breathText');
+const timerEl = document.getElementById('timer');
+const counterEl = document.getElementById('counter');
+const btn = document.getElementById('btnStart');
+
+// Phase timing/chime is language-independent; text & voice come from I18N
+const phaseTiming = [
+  { duration: 4000, chime: 'in'   },
+  { duration: 2000, chime: 'hold' },
+  { duration: 6000, chime: 'out'  },
+  { duration: 2000, chime: 'hold' },
+];
+
+/* ===================== i18n ===================== */
+const I18N = {
+  zh: {
+    lang: 'zh-CN', start: '🌊 开始呼吸', pause: '⏸ 暂停', ready: '准备开始', done: '完成 🌊',
+    voiceLbl: '语音提示', musicLbl: '背景音乐',
+    phases: ['吸 气', '屏 息', '呼 气', '静 止'],
+    voices: ['吸气', '屏息', '呼气', '放松'],
+    finish: '练习完成',
+    counter: n => `第 ${n} 个呼吸`,
+    doneCount: n => `共完成 ${n} 个呼吸周期`,
+  },
+  en: {
+    lang: 'en-US', start: '🌊 Start', pause: '⏸ Pause', ready: 'Get ready', done: 'Done 🌊',
+    voiceLbl: 'Voice', musicLbl: 'Music',
+    phases: ['Inhale', 'Hold', 'Exhale', 'Rest'],
+    voices: ['Breathe in', 'Hold', 'Breathe out', 'Relax'],
+    finish: 'Practice complete',
+    counter: n => `Breath ${n}`,
+    doneCount: n => `${n} breath cycles completed`,
+  },
+  ja: {
+    lang: 'ja-JP', start: '🌊 はじめる', pause: '⏸ 一時停止', ready: '準備', done: '完了 🌊',
+    voiceLbl: '音声ガイド', musicLbl: 'BGM',
+    phases: ['吸って', '止める', '吐いて', '休む'],
+    voices: ['吸って', '止めて', '吐いて', 'リラックス'],
+    finish: '練習完了',
+    counter: n => `${n} 呼吸目`,
+    doneCount: n => `${n} 呼吸サイクル完了`,
+  },
+  ko: {
+    lang: 'ko-KR', start: '🌊 시작', pause: '⏸ 일시정지', ready: '준비', done: '완료 🌊',
+    voiceLbl: '음성 안내', musicLbl: '배경 음악',
+    phases: ['들이쉬기', '멈추기', '내쉬기', '쉬기'],
+    voices: ['들이쉬세요', '멈추세요', '내쉬세요', '이완하세요'],
+    finish: '연습 완료',
+    counter: n => `${n} 번째 호흡`,
+    doneCount: n => `총 ${n} 호흡 주기 완료`,
+  },
+  es: {
+    lang: 'es-ES', start: '🌊 Empezar', pause: '⏸ Pausa', ready: 'Prepárate', done: 'Listo 🌊',
+    voiceLbl: 'Voz', musicLbl: 'Música',
+    phases: ['Inhala', 'Retén', 'Exhala', 'Descansa'],
+    voices: ['Inhala', 'Retén', 'Exhala', 'Relájate'],
+    finish: 'Práctica completa',
+    counter: n => `Respiración ${n}`,
+    doneCount: n => `${n} ciclos de respiración completados`,
+  },
+};
+let currentLang = 'zh';
+
+function setLang(code) {
+  if (!I18N[code]) return;
+  currentLang = code;
+  document.querySelectorAll('.lang-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.lang === code));
+  const L = I18N[code];
+  lblVoice.textContent = L.voiceLbl;
+  lblMusic.textContent = L.musicLbl;
+  // Update idle/labels only when not mid-session
+  if (!running) {
+    btn.textContent = L.start;
+    textEl.textContent = L.ready;
+  } else {
+    btn.textContent = L.pause;
+  }
+}
+/* ================================================ */
+
+/* ===================== Audio engine ===================== */
+let voiceOn = true;
+let musicOn = true;
+let audioCtx = null;
+let masterGain = null;      // chimes/pad master
+let musicNodes = null;      // { stop() }
+
+// Prefer a MALE voice in the given language for that deep, enigmatic vibe
+const MALE_NAMES = /yunyang|yunxi|yunjian|kangkang|云扬|云希|otoya|hattori|ichiro|daniel|george|male|男|jorge|diego|carlos|pablo|enrique|minsu|injoon|sunhi/i;
+function pickVoiceFor(langCode) {
+  const vs = speechSynthesis.getVoices();
+  if (!vs.length) return null;
+  const base = langCode.split('-')[0].toLowerCase();
+  const match = vs.filter(v => v.lang && v.lang.toLowerCase().startsWith(base));
+  return match.find(v => MALE_NAMES.test(v.name)) || match[0] || null;
+}
+if ('speechSynthesis' in window) {
+  // Warm up the voice list (some browsers load it async)
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+}
+
+function ensureAudio() {
+  if (!audioCtx) {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    audioCtx = new AC();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.9;
+    masterGain.connect(audioCtx.destination);
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+
+/* Gentle bell chime. type: 'in' rises, 'out' falls, 'hold' soft single */
+function playChime(type) {
+  if (!audioCtx) return;
+  const now = audioCtx.currentTime;
+  const notes = type === 'in'  ? [523.25, 659.25]   // C5 -> E5 (rising)
+              : type === 'out' ? [659.25, 440.00]   // E5 -> A4 (falling)
+              :                  [587.33];           // D5 (hold/pause)
+  notes.forEach((freq, i) => {
+    const t = now + i * 0.16;
+    const osc = audioCtx.createOscillator();
+    const harm = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    osc.type = 'sine';  osc.frequency.value = freq;
+    harm.type = 'sine'; harm.frequency.value = freq * 2.01;
+    const hg = audioCtx.createGain(); hg.gain.value = 0.25;
+    harm.connect(hg); hg.connect(g);
+    osc.connect(g);
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(0.18, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0008, t + 1.6);
+    g.connect(masterGain);
+    osc.start(t); harm.start(t);
+    osc.stop(t + 1.7); harm.stop(t + 1.7);
+  });
+}
+
+/* Chinese voice cue */
+function speak(text, langCode) {
+  if (!voiceOn || !('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = langCode || 'en-US';
+  const v = pickVoiceFor(u.lang);
+  if (v) u.voice = v;
+  // Deep, slow, enigmatic — "痞子阿姆" low-key vibe
+  u.rate = 0.7;
+  u.pitch = 0.4;
+  u.volume = 1.0;
+  speechSynthesis.speak(u);
+}
+
+/* Ambient background: filtered noise "ocean" + soft pad drone */
+function startMusic() {
+  if (!audioCtx || musicNodes) return;
+
+  // ---- Ocean waves: pink-ish noise through a swelling low-pass ----
+  const bufSize = 2 * audioCtx.sampleRate;
+  const buffer = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
+  const data = buffer.getChannelData(0);
+  let b0=0,b1=0,b2=0;
+  for (let i=0;i<bufSize;i++){
+    const white = Math.random()*2-1;
+    b0 = 0.99765*b0 + white*0.0990460;
+    b1 = 0.96300*b1 + white*0.2965164;
+    b2 = 0.57000*b2 + white*1.0526913;
+    data[i] = (b0+b1+b2+white*0.1848)*0.09;
+  }
+  const noise = audioCtx.createBufferSource();
+  noise.buffer = buffer; noise.loop = true;
+
+  const waveFilter = audioCtx.createBiquadFilter();
+  waveFilter.type = 'lowpass';
+  waveFilter.frequency.value = 500;
+  waveFilter.Q.value = 0.7;
+
+  // LFO swells the filter like waves rolling in (~8s, matches breath feel)
+  const lfo = audioCtx.createOscillator();
+  lfo.frequency.value = 1/8;
+  const lfoGain = audioCtx.createGain();
+  lfoGain.gain.value = 320;
+  lfo.connect(lfoGain); lfoGain.connect(waveFilter.frequency);
+
+  const noiseGain = audioCtx.createGain();
+  noiseGain.gain.value = 0.0;
+  noise.connect(waveFilter); waveFilter.connect(noiseGain);
+  noiseGain.connect(masterGain);
+
+  // ---- Soft pad drone: root + fifth, slow detune shimmer ----
+  const padGain = audioCtx.createGain();
+  padGain.gain.value = 0.0;
+  padGain.connect(masterGain);
+  const padFreqs = [130.81, 196.00, 261.63]; // C3, G3, C4
+  const padOscs = padFreqs.map((f, i) => {
+    const o = audioCtx.createOscillator();
+    o.type = 'sine'; o.frequency.value = f;
+    o.detune.value = (i-1)*4;
+    const og = audioCtx.createGain();
+    og.gain.value = i===2 ? 0.10 : 0.16;
+    o.connect(og); og.connect(padGain);
+    o.start();
+    return o;
+  });
+
+  noise.start(); lfo.start();
+  // Fade in
+  const now = audioCtx.currentTime;
+  noiseGain.gain.linearRampToValueAtTime(0.9, now + 3);
+  padGain.gain.linearRampToValueAtTime(0.5, now + 4);
+
+  musicNodes = {
+    stop() {
+      const t = audioCtx.currentTime;
+      noiseGain.gain.linearRampToValueAtTime(0, t + 1.2);
+      padGain.gain.linearRampToValueAtTime(0, t + 1.2);
+      setTimeout(() => {
+        try { noise.stop(); lfo.stop(); padOscs.forEach(o=>o.stop()); } catch(e){}
+      }, 1400);
+    }
+  };
+}
+
+function stopMusic() {
+  if (musicNodes) { musicNodes.stop(); musicNodes = null; }
+}
+
+function toggleVoice() {
+  voiceOn = !voiceOn;
+  btnVoice.classList.toggle('active', voiceOn);
+  if (!voiceOn && 'speechSynthesis' in window) speechSynthesis.cancel();
+}
+
+function toggleMusic() {
+  musicOn = !musicOn;
+  btnMusic.classList.toggle('active', musicOn);
+  if (running) {
+    if (musicOn) { ensureAudio(); startMusic(); }
+    else stopMusic();
+  }
+}
+
+const btnVoice = document.getElementById('btnVoice');
+const btnMusic = document.getElementById('btnMusic');
+const lblVoice = document.getElementById('lblVoice');
+const lblMusic = document.getElementById('lblMusic');
+/* ===================================================== */
+
+function formatTime(sec) {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+function runPhase(index) {
+  if (!running) return;
+  const t = phaseTiming[index];
+  const L = I18N[currentLang];
+  textEl.textContent = L.phases[index];
+
+  // Audio cues so you can follow the rhythm with eyes closed
+  playChime(t.chime);
+  speak(L.voices[index], L.lang);
+
+  if (index === 0) {
+    cycleCount++;
+    counterEl.textContent = L.counter(cycleCount);
+  }
+
+  phaseTimeout = setTimeout(() => {
+    const next = (index + 1) % 4;
+    runPhase(next);
+  }, t.duration);
+}
+
+function toggleBreath() {
+  const L = I18N[currentLang];
+  if (running) {
+    // Stop
+    running = false;
+    circle.classList.remove('active');
+    timerEl.classList.remove('show');
+    textEl.textContent = L.ready;
+    counterEl.textContent = '';
+    btn.textContent = L.start;
+    btn.classList.remove('running');
+    clearInterval(timerInterval);
+    clearTimeout(phaseTimeout);
+    stopMusic();
+    if ('speechSynthesis' in window) speechSynthesis.cancel();
+    totalSeconds = 300;
+    cycleCount = 0;
+    timerEl.textContent = '5:00';
+  } else {
+    // Start
+    running = true;
+    totalSeconds = 300;
+    cycleCount = 0;
+    circle.classList.add('active');
+    timerEl.classList.add('show');
+    btn.textContent = L.pause;
+    btn.classList.add('running');
+
+    ensureAudio();
+    if (musicOn) startMusic();
+
+    runPhase(0);
+
+    timerInterval = setInterval(() => {
+      totalSeconds--;
+      timerEl.textContent = formatTime(totalSeconds);
+      if (totalSeconds <= 0) {
+        const finishedCycles = cycleCount;   // capture before toggleBreath resets it
+        toggleBreath();
+        playChime('in');
+        speak(L.finish, L.lang);
+        textEl.textContent = L.done;
+        counterEl.textContent = L.doneCount(finishedCycles);
+        timerEl.textContent = '0:00';
+        timerEl.classList.add('show');
+      }
+    }, 1000);
+  }
+}
+</script>
+</body>
+</html>
