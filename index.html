@@ -540,7 +540,7 @@ body {
     </div>
 
     <div class="audio-toggles">
-      <button class="audio-toggle active" id="btnVoice" onclick="toggleVoice()">
+      <button class="audio-toggle" id="btnVoice" onclick="toggleVoice()">
         <span class="at-icon">🔊</span> <span id="lblVoice">语音提示</span>
       </button>
       <button class="audio-toggle active" id="btnMusic" onclick="toggleMusic()">
@@ -800,7 +800,7 @@ function setLang(code) {
 /* ================================================ */
 
 /* ===================== Audio engine ===================== */
-let voiceOn = true;
+let voiceOn = false;   // voice guidance off by default
 let musicOn = true;
 let audioCtx = null;
 let masterGain = null;      // chimes/pad master
